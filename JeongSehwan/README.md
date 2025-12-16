@@ -58,72 +58,134 @@ SKN22-2nd-3Team/
 
 ## 📊 탐색적 데이터 분석 (EDA)
 
-> 본 섹션은 Spotify 사용자 데이터의 분포·특징·이탈 신호를 탐색하여, 모델링 방향과 비즈니스 인사이트 도출을 위한 근거를 제공합니다.
+본 섹션은 Spotify 사용자 데이터의 분포·특징·이탈 신호를 탐색하여, 모델링 방향과 비즈니스 인사이트 도출을 위한 근거를 제공합니다.
 
-### 1) 🎯 분석 목표
+본 EDA는 “현실 설명”보다 **의도한 이탈 패턴이 데이터에 제대로 주입되었는지 검증**하는 것을 목표로 합니다.
+
+원본 데이터(origin)는 변수–타깃 관계가 약해 학습이 어려웠고, 생성 데이터(generated)는 학습 가능한 신호를 만들기 위해 패턴을 주입했습니다.
+
+## 1) 🎯 Data Overview
 
 * **타깃(`is_churned`) 분포**를 확인해 클래스 불균형 여부 점검 
-* 핵심 수치형 변수(청취/활동/만족도)의 **분포와 특징** 파악
-* `subscription_type`, `device_type`, `country` 등 **범주형 변수별 이탈률** 비교
+* 핵심 수치형 변수(`Offline_listening`/`ads_listening`/`subscription`)의 **분포와 특징** 파악
+* Origin Data와 Generate Data 비교 후 **핵심 패턴** 파악
 * 수치형 변수 간 **상관관계(히트맵)** 확인 및 중복/구조적 관계 진단
 
+### 1.1 데이터셋 규모
+
+* Origin: **8,000 rows × 12 columns**
+* Generated: **10,000 rows × 12 columns**
+* Target: `is_churned` (1=이탈, 0=유지)
+
+### 1.2 타깃 분포(이탈률)
+
+* Origin 이탈률: **25.89%**
+* Generated 이탈률: **31.79%**
+
+Generated는 단순히 이탈률만 바뀐 게 아니라, **이탈이 특정 조건(광고/요금제/오프라인)에서 집중**되도록 구성되어 있음.
+
+![청취 시간 분포](./images/3-1.png)
 ---
 
-### 2) ✅ 데이터 검증 (Data Validation)
+## 2) ✅ Data Quality Check (Generated)
 
-* 결측치/중복 여부 점검 (전처리 완료 데이터 기준)
-* 식별자 `user_id`는 모델 입력에서 제외 (분석 시에도 상관관계 계산에서 제외) 
+### 2.1 결측치
 
----
+* 결측치 비율: **전 컬럼 0% (없음)**
 
-### 3) 🎯 타깃 분포 확인 (Class Imbalance)
+### 2.2 비현실 값(음수) 존재
 
-* `is_churned`(이탈 여부) 분포 확인 결과, **유지(0)** 비중이 더 높아 **클래스 불균형이 존재**
-* 따라서 모델 평가지표는 Accuracy 단독보다 **ROC-AUC / PR-AUC / F1** 중심 평가가 적합 
+정규분포로 생성된 변수에서 일부 음수 발생:
 
-![타깃 분포(이탈/유지)](./images/3-1.png)
----
+* `listening_time < 0` : **18건 (0.18%)**
+* `songs_played_per_day < 0` : **228건 (2.28%)**
 
-### 4) 📈 수치형 변수 분포 (Histogram)
-
-분석 대상(전처리 데이터 기준):
-
-* `listening_time` : 하루 평균 청취 시간(분) 
-* `songs_played_per_day` : 하루 재생 곡 수 
-* `skip_rate` : 스킵 비율(0~1) 
-* `age` : 나이 
-
-**주요 관찰**
-
-* 전반적으로 분포가 크게 치우치지 않으며, **특정 단일 변수의 값만으로 이탈을 강하게 분리하기는 어려운 형태**
-* `skip_rate`는 만족도/불만족의 대표 지표로, **이탈과의 관계 가능성(가설)** 을 확인하기 위해 분포 비교가 중요 
-
-![종합히스토그램](./images/4-1.png)
-![skip_rate 분포(이탈/유지)](./images/4-2.png)
-![listening_time 분포(이탈/유지)](./images/4-3.png)
+![청취 시간 분포](./images/2-1.png)
+![일일 재생 곡 수 분포](./images/2-2.png)
 
 ---
 
-### 5) 🧩 범주형 변수별 이탈률 비교 (Churn Rate by Category)
+## 3) 🎯 핵심 패턴 검증 결과(Generated vs Origin)
 
-대상:
-
-* `subscription_type` : Free / Premium / Family / Student 
-* `device_type` : Mobile / Desktop / Web 
-* `country` : 국가/지역 
-
-**주요 관찰**
-
-* 구독 유형/기기/국가별로 이탈률 차이는 존재하지만, **결정적으로 큰 격차보다는 “소폭 차이” 중심**
-* 국가(`country`)는 범주 수가 많아 **사용자 수 상위 국가만 추려** 가독성 있게 비교
-
-![구독 유형별 이탈율](./images/5-1-1.png)
-![사용 기기별 이탈율](./images/5-2.png)
-![국가별 이탈율](./images/5-3.png)
+> 아래 3개는 Generated에서 **가장 강한 학습 신호**이며, Origin에서는 거의 차이가 없었다.
 
 ---
 
-### 6) 🔥 상관관계 분석 (Correlation Heatmap)
+### 3.1 요금제(subscription_type)별 이탈률
+
+### Origin (차이 약함)
+
+* Free: **24.93%**
+* Premium: **25.06%**
+* Student: **26.19%**
+* Family: **27.52%**
+
+### Generated (차이 매우 큼)
+
+* Free: **46.33%** (n=5,942 / 59.4%)
+* Student: **26.57%** (n=1,020 / 10.2%)
+* Premium: **5.10%** (n=3,038 / 30.4%)
+
+
+![요금제별 이탈률(Origin vs Generated)](./images/fig04_subscription_churn_compare.png)
+
+---
+
+### 3.2 오프라인 사용(offline_listening) 여부
+
+### Origin
+
+* offline=0: **24.93%**
+* offline=1: **26.21%** (차이 미미)
+
+### Generated
+
+* offline=0: **45.59%** (n=5,012 / 50.1%)
+* offline=1: **17.92%** (n=4,988 / 49.9%)
+
+
+![오프라인 사용 여부별 이탈률(Origin vs Generated)](./images/fig05_offline_churn_compare.png)
+
+---
+
+### 3.3 광고 피로(ads_listened_per_week) 임계점(Threshold)
+
+Generated에서 이탈률이 **ads=15를 기준으로 급격히 달라짐**:
+
+* ads ≤ 15: **19.15%** (n=5,342 / 53.4%)
+* ads ≥ 16: **46.29%** (n=4,658 / 46.6%)
+
+Origin은 동일 기준에서 차이가 거의 없음:
+
+* ads ≤ 15: **25.96%**
+* ads ≥ 16: **25.60%**
+
+
+![광고 노출 수 분포](./images/fig06_ads_dist.png)
+![광고 노출 수별 이탈률(선/막대)](./images/fig07_ads_churn_by_value.png)
+![ads 임계점(≤15 vs ≥16) 이탈률 비교(Origin vs Generated)](./images/fig08_ads_threshold_compare.png)
+---
+
+## 4) 📈 상호작용(Interaction)
+
+### 5.1 요금제 × 오프라인
+
+>Generated churn rate:
+
+* Free: `offline=0` **66.33%**, `offline=1` **26.26%**
+* Student: `offline=0` **46.67%**, `offline=1` **6.47%**
+* Premium: `offline=0` **4.78%**, `offline=1` **5.42%**
+
+
+
+* Free/Student는 **offline 여부에 따라 이탈률이 크게 출렁임**
+* Premium은 이미 낮은 이탈률이라 offline 효과가 상대적으로 약함
+
+
+![요금제×오프라인 이탈률 히트맵](./images/fig09_sub_offline_heatmap.png)
+---
+
+## 5) 🔥 상관관계 분석 (Correlation Heatmap)
 
 * 수치형 변수 간 상관관계를 통해 **중복 변수/구조적 관계**를 점검
 * `user_id`는 수치형이더라도 의미 없는 식별자이므로 **상관관계 계산에서 자동 제외** 
@@ -142,9 +204,10 @@ SKN22-2nd-3Team/
 
 ## 🧠 EDA 핵심 요약 (Key Insights)
 
-1. **클래스 불균형 존재** → F1/ROC-AUC/PR-AUC 중심 평가 권장
-2. 수치형 변수의 분포는 전반적으로 완만하며, **단일 변수로 강한 분리 신호는 제한적**
-3. `subscription_type`, `device_type`, `country`는 **세그먼트 관점 차이는 있으나** 큰 격차보다는 보조 신호 성격
-4. `ads_listened_per_week`와 `offline_listening`은 **구독 구조로 인해 중복 정보 가능성** → 모델 입력 시 조합/중복 제거 전략 필요
+* Origin 데이터는 요금제/광고/오프라인 등 주요 변수에서 **이탈률 차이가 작아 학습 신호가 약함**.
+* Generated 데이터는 데이터 생성 규칙에 따라
 
+  1. **Free & 광고 과다(>15)** 에서 이탈 급증(Threshold)
+  2. **Premium 또는 offline 사용**은 이탈을 강하게 억제(Protective)
+  3. 결과적으로 **세그먼트가 명확히 분리**되어 모델 학습에 유리한 구조를 가짐
 ---
