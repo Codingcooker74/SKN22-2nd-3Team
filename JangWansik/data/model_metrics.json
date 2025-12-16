@@ -1,28 +1,24 @@
 {
     "RandomForest": {
-        "Accuracy": 0.9445,
-        "F1-Score": 0.8870803662258393
+        "Accuracy": 0.8115,
+        "F1-Score": 0.7437117607070021,
+        "Best Threshold": 0.5300000000000002
     },
     "XGBoost": {
-        "Accuracy": 0.946,
-        "F1-Score": 0.8860759493670886
+        "Accuracy": 0.8005,
+        "F1-Score": 0.7176220806794055
     },
     "LightGBM": {
-        "Accuracy": 0.9485,
-        "F1-Score": 0.8896034297963559
+        "Accuracy": 0.805,
+        "F1-Score": 0.7202295552367288
     },
     "CatBoost": {
-        "Accuracy": 0.9525,
-        "F1-Score": 0.8972972972972973
-    },
-    "Voting Ensemble (ML)": {
-        "Accuracy": 0.95,
-        "F1-Score": 0.897119341563786,
-        "Best Threshold": 0.34
+        "Accuracy": 0.807,
+        "F1-Score": 0.7161764705882353
     },
     "Deep Learning (DNN)": {
-        "Accuracy": 0.946,
-        "F1-Score": 0.891566265060241,
-        "Best Threshold": 0.6900000000000004
+        "Accuracy": 0.8015,
+        "F1-Score": 0.728711760707002,
+        "Best Threshold": 0.5
     }
 }
