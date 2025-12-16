@@ -42,6 +42,7 @@
 * **Language**: Python 3.9+
 * **Web Framework**: Streamlit
 * **ML/DL**: Scikit-learn, XGBoost, TensorFlow (Keras)
+* **Sampling**: Imbalanced-learn (BorderlineSMOTE)
 * **Data Analysis**: Pandas, NumPy
 * **Visualization**: Plotly, Matplotlib, Seaborn
 
