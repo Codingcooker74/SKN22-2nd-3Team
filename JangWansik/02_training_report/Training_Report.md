@@ -57,7 +57,7 @@
 
 | 혼동 행렬 (Confusion Matrix) | ROC 곡선 (ROC Curve) |
 | :---: | :---: |
-| ![DNN 혼동 행렬](images/dnn_confusion_matrix.png) | (위의 모델 비교 ROC 곡선 참조) |
+| ![DNN 혼동 행렬](images/dnn_confusion_matrix.png) | ![DNN ROC 곡선](images/dnn_roc.png) |
 
 ---
 
