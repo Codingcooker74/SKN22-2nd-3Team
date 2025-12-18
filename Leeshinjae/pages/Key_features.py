@@ -88,6 +88,24 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-bottom: 40px;
 }
 
+/* 네비게이션 버튼 스타일 (기존 디자인 계승) */
+div[data-testid="stColumn"] div[data-testid="stButton"] > button {
+    background-color: #111111;
+    border: 1px solid #1DB954;
+    border-radius: 12px;
+    color: white;
+    width: 100%;
+    height: 60px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+div[data-testid="stColumn"] div[data-testid="stButton"] > button:hover {
+    background-color: #1DB954;
+    color: black;
+}
+
 /* 푸터 */
 .footer {
     text-align: center;
@@ -160,6 +178,19 @@ fig.update_layout(
 
 # 그래프 출력
 st.plotly_chart(fig, use_container_width=True)
+
+# -------------------------------
+# 하단 네비게이션 버튼 (1행 6열 구성을 통해 양 끝 라인 맞춤)
+st.markdown("<br>", unsafe_allow_html=True)
+nav_cols = st.columns(15)
+
+with nav_cols[0]: # 첫 번째 박스 라인에 맞춤
+    if st.button("🏠 Home"):
+        st.switch_page("Home.py")
+
+with nav_cols[14]: # 여섯 번째 박스 라인에 맞춤
+    if st.button("Next ➡️"):
+        st.switch_page("pages/model_comparison.py") # 다음 페이지 경로
 
 # -------------------------------
 # 푸터

@@ -76,6 +76,24 @@ st.markdown("""
         color: #FFFFFF;
         font-weight: 600;
     }
+    /* 하단 네비게이션 버튼 스타일 */
+    div[data-testid="stColumn"] div[data-testid="stButton"] > button {
+        background-color: #111111;
+        border: 1px solid #1DB954;
+        border-radius: 12px;
+        color: white;
+        width: 100%;
+        height: 60px;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    div[data-testid="stColumn"] div[data-testid="stButton"] > button:hover {
+        background-color: #1DB954;
+        color: black;
+    }        
 </style>
 """, unsafe_allow_html=True)
 
@@ -165,6 +183,22 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
 
-# 5. 푸터 (에러가 자주 발생하는 지점)
+# ---------------------------------------------------------
+# 하단 네비게이션 버튼 (양 끝 정렬)
+st.markdown("<br>", unsafe_allow_html=True)
+nav_cols = st.columns(15)
+
+with nav_cols[0]: # 좌측 끝 라인
+    if st.button("🏠 Home"):
+        st.switch_page("Home.py")
+
+with nav_cols[14]: # 우측 끝 라인
+    if st.button("Next ➡️"):
+        # 마지막 요약 페이지나 메인으로 연결
+        st.switch_page("pages/ChurnCheck.py") 
+# ---------------------------------------------------------
+
+# 기존 푸터
 st.markdown("<br><hr>", unsafe_allow_html=True)
-st.caption("© 2025 Spotify Churn Analytics Dashboard")
+st.caption("© 2025 Spotify Churn Analytics Dashboard")   
+

@@ -115,6 +115,24 @@ html, body, [data-testid="stAppViewContainer"] {
     justify-content: space-around;
     margin: 20px 0;
 }
+ /* 하단 네비게이션 버튼 스타일 */
+div[data-testid="stColumn"] div[data-testid="stButton"] > button {
+    background-color: #111111;
+    border: 1px solid #1DB954;
+    border-radius: 12px;
+    color: white;
+    width: 100%;
+    height: 60px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+div[data-testid="stColumn"] div[data-testid="stButton"] > button:hover {
+    background-color: #1DB954;
+    color: black;
+}           
 </style>
 """, unsafe_allow_html=True)
 
@@ -636,6 +654,18 @@ if ml_prob is not None and dl_prob is not None:
     }
     summary_df = pd.DataFrame(summary_data)
     st.dataframe(summary_df, use_container_width=True, hide_index=True)
+
+    # 하단 네비게이션 버튼 (1행 4열로 구성하여 끝 라인 맞춤)
+    st.markdown("<br>", unsafe_allow_html=True)
+    nav_cols = st.columns(15)
+
+    with nav_cols[0]: # 좌측 첫 번째 칸 (Home)
+        if st.button("🏠 Home"):
+            st.switch_page("Home.py") # 메인 파일명 확인 필요
+
+    with nav_cols[14]: # 우측 네 번째 칸 (Next)
+        if st.button("Next ➡️"):
+            st.switch_page("pages/business_strategy.py") # 다음 페이지 파일명 확인 필요
 
 # 푸터
 st.markdown("---")
