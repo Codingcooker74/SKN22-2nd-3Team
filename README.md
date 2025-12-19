@@ -156,8 +156,9 @@ Generated 데이터는 합성 과정 특성상 **비현실 값(음수)** 이 일
 ```
 SKN22-2nd-3Team/
 ├── data/                  # 원본 및 전처리된 데이터
-├── models/                # 학습된 모델 (.pkl, .h5) 및 전처리기
+├── 03_trained_model/      # 학습된 모델 (.pkl, .onnx) 및 평가 지표
 ├── notebooks/             # 데이터 분석 및 모델 학습 노트북 (ipynb)
+├── EDA/                   # 팀원별 탐색적 데이터 분석 (EDA)
 ├── app/                   # Streamlit 애플리케이션 소스
 │   ├── Home.py            # 메인 홈 화면
 │   └── pages/             # 메뉴별 상세 페이지
