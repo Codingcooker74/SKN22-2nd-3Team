@@ -14,8 +14,6 @@ imbalanced-learn==0.12.0
 joblib==1.3.2
 
 # Deep Learning
-# TensorFlow 2.15.0 (Nov 2023) matches with Torch 2.1.x era
-tensorflow==2.15.0
 torch==2.1.2
 
 # Visualization
