@@ -37,10 +37,10 @@
 
 | 모델 (Algorithm) | 핵심 파라미터 (Key Parameters) | 불균형 처리 (class_weight) |
 | :--- | :--- | :--- |
-| **Random Forest** | `n_estimators`: 300~500, `max_depth`: 10~20 | `balanced_subsample` |
-| **XGBoost** | `n_estimators`: 500~1000, `learning_rate`: 0.05 | `scale_pos_weight=2.0` |
-| **LightGBM** | `n_estimators`: 500~1000, `learning_rate`: 0.05 | `scale_pos_weight=2.0` |
-| **CatBoost** | `iterations`: 500~1000, `learning_rate`: 0.05 | `auto_class_weights='SqrtBalanced'` |
+| **Random Forest** | `n_estimators`: 300, 500 / `max_depth`: 10, 20 | `balanced_subsample` |
+| **XGBoost** | `n_estimators`: 500, 1000 / `learning_rate`: 0.05 | `scale_pos_weight=2.0` |
+| **LightGBM** | `n_estimators`: 500, 1000 / `learning_rate`: 0.05 | `scale_pos_weight=2.0` |
+| **CatBoost** | `iterations`: 500, 1000 / `learning_rate`: 0.05 | `auto_class_weights='SqrtBalanced'` |
 | **Deep Learning (DNN)** | `Adam(lr=0.0005)`, `Batch=64`, `SiLU`, `LayerNorm` | `BorderlineSMOTE` (Training only) |
 
 ### 3.2 모델 성능 비교 결과
@@ -74,7 +74,7 @@
 - **구조적 특징**:
   - **Architecture**: [512 -> 256 -> 128 -> 64 -> 32 -> 1]의 5계층 깊은 신경망 구조.
   - **Regularization**: 층마다 `LayerNorm`과 `Dropout(0.2~0.4)`을 적용하여 과적합을 강력히 억제함.
-  - **Activation**: `SiLU (Swish)` 함수를 사용하여 ReLU보다 부드러운 그래디언트 흐름 유도.
+  - **Activation**: `SiLU` 함수를 사용하여 ReLU보다 부드러운 그래디언트 흐름 유도.
 - **성능 분석**: 전체 정확도(Accuracy)는 가장 높았으나, F1-Score에서 RF에 근소하게 밀렸다. 하지만 재현율은 가장 높아 잠재적 이탈자를 놓치지 않는 특성을 보였다.
 - **성능 시각화**:
 
